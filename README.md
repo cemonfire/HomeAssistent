@@ -1,18 +1,28 @@
-# Home Dashboard (Prototyp)
+# Zuhause – Smart-Home-Dashboard (Prototyp)
 
-Statische Web-App mit Beispieldaten: Kameras, Termine, Musik, Lichter, Rollläden, Alexa-Szenen.
-Kein Build-Schritt nötig.
+Kiosk-Dashboard für Wandtablet und Desktop, das auf dem Handy zu einer scrollbaren Ansicht umbricht.
+Läuft mit Beispieldaten, ohne Build-Schritt.
+
+- **Kameras:** Hauptbild mit Vorschaubildern, simulierte Feeds mit Personenerkennung, Bewegungshinweise
+- **Licht:** Tippen schaltet, waagerecht ziehen dimmt
+- **Rollläden:** Tippen fährt auf oder zu, senkrecht ziehen setzt die Position
+- **Szenen / Alexa:** Morgen, Film, Alle aus, Nacht
+- **Termine:** Tagesansicht mit Countdown zum nächsten Termin
+- **Musik:** Player mit Cover-Farbe und Lautstärke
+- **Ruhemodus:** Nach 2 Minuten ohne Bedienung erscheint eine große Uhr, die nachts gedimmt wird und gegen Einbrennen langsam wandert
 
 ## Starten
 
     python3 -m http.server 8080      # oder: npx serve
-    # dann http://localhost:8080 öffnen
+    # http://localhost:8080 öffnen
 
-## Echte Kamera einbinden (data.js)
+## Anpassen
 
-- `webcam`: Laptop-/Handykamera (nur auf localhost oder HTTPS)
-- `mjpeg` / `iframe`: Stream von go2rtc, z. B. `http://HOST:1984/api/stream.mjpeg?src=tapo`
+Alles steht in `data.js`: Name, Ruhemodus-Zeit, Kameras, Termine, Lichter, Rollläden, Szenen.
 
-## Nächste Schritte
+Echte Kamera über go2rtc:
+`{ name: "Wohnzimmer", type: "mjpeg", url: "http://HOST:1984/api/stream.mjpeg?src=tapo" }`
 
-Beispieldaten in `data.js` durch Home Assistent (WebSocket-API) ersetzen.
+## Nächster Schritt
+
+Die Beispieldaten in `data.js` durch Home Assistant ersetzen (WebSocket-API).

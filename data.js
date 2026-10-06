@@ -1,39 +1,43 @@
 // Beispieldaten. Später ersetzt durch Home Assistant (WebSocket/REST).
-// Kamera-Typen:
-//   sim     – simulierter Feed (läuft ohne Hardware)
-//   webcam  – Laptop-/Handy-Kamera via getUserMedia
-//   mjpeg   – <img src="..."> (z. B. go2rtc: http://HOST:1984/api/stream.mjpeg?src=name)
-//   iframe  – eingebettete Seite (z. B. go2rtc: http://HOST:1984/stream.html?src=name)
 window.DATA = {
-  user: "Gast",
-  weather: { temp: 17, text: "Leicht bewölkt", icon: "" },
+  user: "",            // dein Vorname für die Begrüßung
+  idleSeconds: 120,    // Ruhemodus nach X Sekunden ohne Bedienung (0 = aus)
 
+  weather: { temp: 17, text: "Leicht bewölkt" },
+
+  // Kamera-Typen:
+  //   sim     – simulierter Feed (läuft ohne Hardware), scene: door | garden | garage
+  //   webcam  – Laptop-/Handy-Kamera (nur localhost oder HTTPS)
+  //   mjpeg   – z. B. go2rtc: http://HOST:1984/api/stream.mjpeg?src=name
+  //   iframe  – z. B. go2rtc WebRTC: http://HOST:1984/stream.html?src=name
+  // notify: true → Hinweis bei Bewegung
   cameras: [
-    { id: "door",   name: "Haustür",  type: "sim", seed: 1 },
-    { id: "garden", name: "Garten",   type: "sim", seed: 2 },
-    { id: "garage", name: "Garage",   type: "sim", seed: 3 },
-    { id: "webcam", name: "Webcam (Test)", type: "webcam" },
+    { id: "door",   name: "Haustür", type: "sim", scene: "door", notify: true },
+    { id: "garden", name: "Garten",  type: "sim", scene: "garden" },
+    { id: "garage", name: "Garage",  type: "sim", scene: "garage" },
+    { id: "webcam", name: "Webcam",  type: "webcam" },
     // { id: "tapo", name: "Wohnzimmer", type: "mjpeg", url: "http://192.168.1.10:1984/api/stream.mjpeg?src=tapo" },
   ],
 
+  // "in" = Minuten relativ zu jetzt, damit die Demo immer aktuell wirkt
   events: [
-    { time: "08:30", title: "Daily Standup", cal: "Arbeit", color: "#4f8cff" },
-    { time: "12:00", title: "Mittag mit Anna", cal: "Privat", color: "#3ddc97" },
-    { time: "15:30", title: "Zahnarzt", cal: "Privat", color: "#3ddc97" },
-    { time: "18:00", title: "Müll rausstellen", cal: "Haushalt", color: "#ffb84d" },
-    { time: "Mi 09:00", title: "Paketlieferung", cal: "Haushalt", color: "#ffb84d" },
+    { in: -150, dur: 30, title: "Daily Standup",    cal: "Arbeit",   color: "#7aa2ff" },
+    { in: 35,   dur: 60, title: "Mittag mit Anna",  cal: "Privat",   color: "#5fe0a8" },
+    { in: 185,  dur: 45, title: "Zahnarzt",         cal: "Privat",   color: "#5fe0a8" },
+    { in: 330,  dur: 15, title: "Müll rausstellen", cal: "Haushalt", color: "#ffc566" },
+    { in: 1460, dur: 30, title: "Paketlieferung",   cal: "Haushalt", color: "#ffc566" },
   ],
 
   lights: [
-    { id: "l1", name: "Wohnzimmer", on: true,  brightness: 70 },
-    { id: "l2", name: "Küche",      on: false, brightness: 100 },
+    { id: "l1", name: "Wohnzimmer",   on: true,  brightness: 70 },
+    { id: "l2", name: "Küche",        on: false, brightness: 100 },
     { id: "l3", name: "Schlafzimmer", on: false, brightness: 40 },
-    { id: "l4", name: "Flur",       on: true,  brightness: 55 },
+    { id: "l4", name: "Flur",         on: true,  brightness: 35 },
   ],
 
   covers: [
-    { id: "c1", name: "Wohnzimmer", position: 100 },
-    { id: "c2", name: "Küche",      position: 60 },
+    { id: "c1", name: "Wohnzimmer",   position: 100 },
+    { id: "c2", name: "Küche",        position: 60 },
     { id: "c3", name: "Schlafzimmer", position: 0 },
   ],
 
@@ -43,16 +47,17 @@ window.DATA = {
     room: "Wohnzimmer",
     track: 0,
     queue: [
-      { title: "Midnight City", artist: "M83", dur: 244, hue: 280 },
-      { title: "Intro", artist: "The xx", dur: 127, hue: 200 },
-      { title: "Weightless", artist: "Marconi Union", dur: 480, hue: 160 },
+      { title: "Midnight City", artist: "M83",           dur: 244, hue: 275 },
+      { title: "Intro",         artist: "The xx",        dur: 127, hue: 200 },
+      { title: "Weightless",    artist: "Marconi Union", dur: 480, hue: 160 },
     ],
   },
 
+  // Szenen = Alexa-Routinen. lights: Name → Helligkeit (nicht genannte gehen aus)
   scenes: [
-    { id: "morning", name: "Guten Morgen", icon: "☀", say: "Alexa, guten Morgen" },
-    { id: "movie",   name: "Film",         icon: "◐", say: "Alexa, Filmabend" },
-    { id: "away",    name: "Alle aus",     icon: "○", say: "Alexa, ich gehe" },
-    { id: "night",   name: "Gute Nacht",   icon: "☾", say: "Alexa, gute Nacht" },
+    { id: "morning", name: "Morgen",   icon: "sun",   say: "guten Morgen", lights: { "Küche": 80, "Flur": 40 }, covers: 100 },
+    { id: "movie",   name: "Film",     icon: "tv",    say: "Filmabend",    lights: { "Wohnzimmer": 12 },        covers: 0, music: false },
+    { id: "away",    name: "Alle aus", icon: "power", say: "ich gehe",     lights: {},                          covers: 0, music: false },
+    { id: "night",   name: "Nacht",    icon: "moon",  say: "gute Nacht",   lights: { "Flur": 5 },               covers: 0, music: false },
   ],
 };
