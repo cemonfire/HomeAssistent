@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f1115">
+  <title>Home Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <div class="greeting" id="greeting"></div>
+      <div class="date" id="date"></div>
+    </div>
+    <div class="top-right">
+      <div class="weather" id="weather"></div>
+      <div class="clock" id="clock"></div>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card cameras" aria-labelledby="h-cams">
+      <h2 id="h-cams">Kameras</h2>
+      <div class="cam-grid" id="cams"></div>
+    </section>
+
+    <section class="card" aria-labelledby="h-cal">
+      <h2 id="h-cal">Termine</h2>
+      <ul class="events" id="events"></ul>
+    </section>
+
+    <section class="card" aria-labelledby="h-music">
+      <h2 id="h-music">Musik</h2>
+      <div id="music"></div>
+    </section>
+
+    <section class="card" aria-labelledby="h-lights">
+      <h2 id="h-lights">Lichter</h2>
+      <div class="list" id="lights"></div>
+    </section>
+
+    <section class="card" aria-labelledby="h-covers">
+      <h2 id="h-covers">Rollläden</h2>
+      <div class="list" id="covers"></div>
+    </section>
+
+    <section class="card" aria-labelledby="h-alexa">
+      <h2 id="h-alexa">Alexa &amp; Szenen</h2>
+      <div class="scenes" id="scenes"></div>
+      <div class="log" id="log" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
