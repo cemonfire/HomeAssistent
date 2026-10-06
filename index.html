@@ -13,66 +13,78 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..700&display=swap">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/overview.css">
+  <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
-  <div class="app" id="app">
-    <section class="hero" id="hero" aria-label="Kameras">
-      <div class="hero-media" id="hero-media"></div>
-      <div class="hero-top">
-        <span class="chip"><span class="live-dot"></span>Live</span>
-        <div class="hero-actions">
-          <span class="chip mono" id="cam-time"></span>
-          <button class="icon-btn glass" id="cam-expand" type="button" aria-label="Kamera vergrößern"></button>
-        </div>
-      </div>
-      <div class="hero-bottom">
-        <div class="cam-title" id="cam-name"></div>
-        <div class="cam-sub" id="cam-sub"></div>
-      </div>
-      <div class="thumbs" id="thumbs"></div>
-    </section>
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <nav class="rail" id="rail" aria-label="Navigation"></nav>
 
-    <aside class="side">
-      <header class="clock-block">
-        <div class="side-top">
-          <span id="greeting"></span>
-          <div class="side-actions">
-            <button class="icon-btn" id="btn-ambient" type="button" aria-label="Ruhemodus" title="Ruhemodus"></button>
-            <button class="icon-btn" id="btn-fs" type="button" aria-label="Vollbild" title="Vollbild"></button>
+  <main class="pages" id="pages">
+    <!-- Seite 1: Übersicht -->
+    <div class="page" id="page-home" aria-label="Übersicht">
+      <div class="app">
+        <section class="hero" id="hero" aria-label="Kameras">
+          <div class="hero-media" id="hero-media"></div>
+          <div class="hero-top">
+            <span class="chip"><span class="live-dot"></span>Live</span>
+            <div class="hero-actions">
+              <span class="chip mono" id="cam-time"></span>
+              <button class="icon-btn glass" id="cam-expand" type="button" aria-label="Kamera vergrößern"></button>
+            </div>
           </div>
-        </div>
-        <div class="clock" id="clock">--:--</div>
-        <div class="meta">
-          <span id="date"></span>
-          <span class="weather" id="weather"></span>
-        </div>
-      </header>
+          <div class="hero-bottom">
+            <div class="cam-title" id="cam-name"></div>
+            <div class="cam-sub" id="cam-sub"></div>
+          </div>
+          <div class="thumbs" id="thumbs"></div>
+        </section>
 
-      <section class="scenes-panel" aria-labelledby="h-scenes">
-        <div class="group-h"><h2 id="h-scenes">Szenen</h2><span class="hint">auch per Alexa</span></div>
-        <div class="scenes" id="scenes"></div>
-      </section>
+        <aside class="side">
+          <header class="clock-block">
+            <div class="side-top">
+              <span id="greeting"></span>
+              <div class="people" id="people" aria-label="Anwesenheit"></div>
+            </div>
+            <div class="clock" id="clock">--:--</div>
+            <div class="meta">
+              <span id="date"></span>
+              <span class="weather" id="weather"></span>
+            </div>
+          </header>
 
-      <section class="panel agenda" aria-labelledby="h-agenda">
-        <div class="group-h"><h2 id="h-agenda">Heute</h2><span class="hint" id="agenda-meta"></span></div>
-        <ol class="events" id="agenda"></ol>
-      </section>
+          <section class="scenes-panel" aria-labelledby="h-scenes">
+            <div class="group-h"><h2 id="h-scenes">Szenen</h2><span class="hint">auch per Alexa</span></div>
+            <div class="scenes" id="scenes"></div>
+          </section>
 
-      <section class="panel music" id="music" aria-label="Musik"></section>
-    </aside>
+          <section class="panel agenda" aria-labelledby="h-agenda">
+            <div class="group-h"><h2 id="h-agenda">Heute</h2><span class="hint" id="agenda-meta"></span></div>
+            <ol class="events" id="agenda"></ol>
+          </section>
 
-    <section class="controls" aria-label="Steuerung">
-      <div class="group">
-        <div class="group-h"><h2>Licht</h2><span class="hint">Tippen · Ziehen zum Dimmen</span></div>
-        <div class="tiles" id="lights"></div>
+          <section class="panel music" id="music" aria-label="Musik"></section>
+        </aside>
+
+        <section class="controls" aria-label="Steuerung">
+          <div class="group">
+            <div class="group-h"><h2>Licht</h2><span class="hint">Tippen · Ziehen · Halten für Farbe</span></div>
+            <div class="tiles" id="lights"></div>
+          </div>
+          <div class="group">
+            <div class="group-h"><h2>Rollläden</h2><span class="hint">Tippen · Ziehen zum Fahren</span></div>
+            <div class="tiles" id="covers"></div>
+          </div>
+        </section>
       </div>
-      <div class="group">
-        <div class="group-h"><h2>Rollläden</h2><span class="hint">Tippen · Ziehen zum Fahren</span></div>
-        <div class="tiles" id="covers"></div>
-      </div>
-    </section>
-  </div>
+    </div>
+
+    <div class="page" id="page-rooms" aria-label="Räume"></div>
+    <div class="page" id="page-energy" aria-label="Energie"></div>
+    <div class="page" id="page-security" aria-label="Sicherheit"></div>
+    <div class="page" id="page-info" aria-label="Infos"></div>
+  </main>
 
   <div class="ambient" id="ambient" aria-hidden="true">
     <div class="amb-inner" id="amb-inner">
@@ -82,9 +94,10 @@
     </div>
   </div>
 
+  <div id="layer"></div>
   <div class="toasts" id="toasts" aria-live="polite"></div>
 
   <script src="data.js"></script>
-  <script src="app.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
