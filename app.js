@@ -9,6 +9,10 @@
   const log = (msg) => { $("log").innerHTML = `<b>${new Date().toLocaleTimeString("de-DE")}</b> ${msg}`; };
   const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 
+  const fill = (r) => r.style.setProperty("--p", ((r.value - r.min) / (r.max - r.min)) * 100 + "%");
+  document.addEventListener("input", (e) => e.target.type === "range" && fill(e.target), true);
+  const fillAll = () => document.querySelectorAll("input[type=range]").forEach(fill);
+
   // ---- Header ----
   function tick() {
     const d = new Date();
@@ -16,7 +20,7 @@
     $("greeting").textContent = `${h < 11 ? "Guten Morgen" : h < 18 ? "Guten Tag" : "Guten Abend"}, ${D.user}`;
     $("date").textContent = d.toLocaleDateString("de-DE", { weekday: "long", day: "numeric", month: "long" });
     $("clock").textContent = d.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
-    $("weather").textContent = `${D.weather.icon} ${D.weather.temp}°C · ${D.weather.text}`;
+    $("weather").textContent = `${D.weather.temp}°  ${D.weather.text}`;
   }
   tick(); setInterval(tick, 1000);
 
@@ -47,7 +51,7 @@
       nctx.putImageData(id, 0, 0);
       ctx.imageSmoothingEnabled = false; ctx.drawImage(noise, 0, 0, 640, 360);
       ctx.fillStyle = "#fff"; ctx.font = "16px monospace";
-      ctx.fillText(new Date().toLocaleString("de-DE"), 12, 346);
+      ctx.fillStyle = "rgba(255,255,255,.7)"; ctx.fillText(new Date().toLocaleString("de-DE"), 44, 30);
     };
   }
 
@@ -115,15 +119,21 @@
     const set = (p) => { c.position = p; render(); log(`Rollladen <b>${c.name}</b> → ${val.textContent}`); };
     sl.oninput = () => { c.position = +sl.value; render(); };
     const b = (txt, p) => el("button", { className: "btn", type: "button", onclick: () => set(p) }, txt);
-    row.append(el("div", { className: "row-h" }, el("span", { className: "name" }, c.name), val), sl, el("div", { className: "btns" }, b("▲ Auf", 100), b("■ 50%", 50), b("▼ Zu", 0)));
+    row.append(el("div", { className: "row-h" }, el("span", { className: "name" }, c.name), val), sl, el("div", { className: "btns" }, b("Auf", 100), b("50%", 50), b("Zu", 0)));
     c.render = render; render();
     $("covers").append(row);
   });
 
   // ---- Musik ----
+  const ICON = {
+    prev: '<svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg>',
+    next: '<svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg>',
+    play: '<svg viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg>',
+    pause: '<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>',
+  };
   const M = D.music; let elapsed = 0;
   const mEl = $("music");
-  const cover = el("div", { className: "cover" }, "🎵");
+  const cover = el("div", { className: "cover" });
   const title = el("div", { className: "title" }), artist = el("div", { className: "artist" });
   const bar = el("i"); const time = el("div", { className: "val" });
   const play = el("button", { className: "btn", type: "button", ariaLabel: "Play/Pause" });
@@ -133,7 +143,7 @@
     const t = cur();
     cover.style.background = `linear-gradient(135deg,hsl(${t.hue},70%,45%),hsl(${t.hue + 60},70%,25%))`;
     title.textContent = t.title; artist.textContent = `${t.artist} · ${M.room}`;
-    play.textContent = M.playing ? "⏸" : "▶"; vol.value = M.volume;
+    play.innerHTML = M.playing ? ICON.pause : ICON.play; vol.value = M.volume;
     bar.style.width = `${(elapsed / t.dur) * 100}%`; time.textContent = `${mmss(elapsed)} / ${mmss(t.dur)}`;
   }
   const skip = (d) => { M.track = (M.track + d + M.queue.length) % M.queue.length; elapsed = 0; renderMusic(); log(`Musik: <b>${cur().title}</b>`); };
@@ -141,7 +151,7 @@
   vol.oninput = () => { M.volume = +vol.value; };
   mEl.append(el("div", { className: "player" }, cover, el("div", {}, title, artist),
     el("div", { className: "progress" }, bar), time,
-    el("div", { className: "ctrl" }, el("button", { className: "btn", type: "button", ariaLabel: "Zurück", onclick: () => skip(-1) }, "⏮"), play, el("button", { className: "btn", type: "button", ariaLabel: "Weiter", onclick: () => skip(1) }, "⏭")),
+    el("div", { className: "ctrl" }, el("button", { className: "btn", type: "button", ariaLabel: "Zurück", onclick: () => skip(-1), innerHTML: ICON.prev }), play, el("button", { className: "btn", type: "button", ariaLabel: "Weiter", onclick: () => skip(1), innerHTML: ICON.next })),
     el("label", { className: "vol" }, "🔈", vol)));
   setInterval(() => { if (M.playing) { elapsed++; if (elapsed >= cur().dur) skip(1); else renderMusic(); } }, 1000);
   renderMusic();
@@ -157,7 +167,8 @@
     $("scenes").append(el("button", { className: "scene", type: "button", onclick: () => {
       apply[s.id]();
       D.lights.forEach((l) => l.render()); D.covers.forEach((c) => c.render()); renderMusic();
-      log(`🗣 „${s.say}“ → Szene <b>${s.name}</b> ausgeführt`);
+      log(`„${s.say}“ → <b>${s.name}</b>`); fillAll();
     } }, el("span", {}, s.icon), s.name));
   });
+  fillAll();
 })();

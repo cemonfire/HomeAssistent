@@ -6,7 +6,7 @@
 //   iframe  – eingebettete Seite (z. B. go2rtc: http://HOST:1984/stream.html?src=name)
 window.DATA = {
   user: "Gast",
-  weather: { temp: 17, text: "Leicht bewölkt", icon: "⛅" },
+  weather: { temp: 17, text: "Leicht bewölkt", icon: "" },
 
   cameras: [
     { id: "door",   name: "Haustür",  type: "sim", seed: 1 },
@@ -21,7 +21,7 @@ window.DATA = {
     { time: "12:00", title: "Mittag mit Anna", cal: "Privat", color: "#3ddc97" },
     { time: "15:30", title: "Zahnarzt", cal: "Privat", color: "#3ddc97" },
     { time: "18:00", title: "Müll rausstellen", cal: "Haushalt", color: "#ffb84d" },
-    { time: "Morgen 09:00", title: "Paketlieferung", cal: "Haushalt", color: "#ffb84d" },
+    { time: "Mi 09:00", title: "Paketlieferung", cal: "Haushalt", color: "#ffb84d" },
   ],
 
   lights: [
@@ -50,9 +50,9 @@ window.DATA = {
   },
 
   scenes: [
-    { id: "morning", name: "Guten Morgen", icon: "🌅", say: "Alexa, guten Morgen" },
-    { id: "movie",   name: "Film",         icon: "🎬", say: "Alexa, Filmabend" },
-    { id: "away",    name: "Alle aus",     icon: "🚪", say: "Alexa, ich gehe" },
-    { id: "night",   name: "Gute Nacht",   icon: "🌙", say: "Alexa, gute Nacht" },
+    { id: "morning", name: "Guten Morgen", icon: "☀", say: "Alexa, guten Morgen" },
+    { id: "movie",   name: "Film",         icon: "◐", say: "Alexa, Filmabend" },
+    { id: "away",    name: "Alle aus",     icon: "○", say: "Alexa, ich gehe" },
+    { id: "night",   name: "Gute Nacht",   icon: "☾", say: "Alexa, gute Nacht" },
   ],
 };
